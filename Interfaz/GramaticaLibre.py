@@ -9,6 +9,7 @@ from tkinter import messagebox
 from tkinter import filedialog
 import Interfaz.MenuPrincipal
 from PIL import Image
+import Interfaz.ListaGramaticaArbol
 import Clases.GramaticaLDC
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"../assets/frame0")
@@ -104,6 +105,7 @@ class GramaticaLibre(tk.Toplevel):
             relief="flat",
             font=("Helveltica", 16),
             text="Arbol de Derivacion",
+            command= lambda: Interfaz.ListaGramaticaArbol.ListaGramaticaArbol()
 
         )
         button_5.place(
