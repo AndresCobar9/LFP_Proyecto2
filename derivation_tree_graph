@@ -1,0 +1,28 @@
+// Derivation Tree
+digraph {
+	S0 [label=S0]
+	A0 [label=A]
+	S0 -> A0
+	a1 [label=a]
+	A0 -> a1
+	A2 [label=A]
+	A0 -> A2
+	a3 [label=a]
+	A0 -> a3
+	B4 [label=B]
+	A2 -> B4
+	b5 [label=b]
+	B4 -> b5
+	B6 [label=B]
+	B4 -> B6
+	b7 [label=b]
+	B4 -> b7
+	C8 [label=C]
+	B6 -> C8
+	z9 [label=z]
+	C8 -> z9
+	C10 [label=C]
+	C8 -> C10
+	z11 [label=z]
+	C10 -> z11
+}
