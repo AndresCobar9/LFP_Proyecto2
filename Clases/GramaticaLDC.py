@@ -24,3 +24,4 @@ def get_all():
         print(grammar)
         print()
     return all_grammars
+
