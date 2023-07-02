@@ -7,13 +7,14 @@ from PIL import Image
 import Clases.GramaticaLDC
 import Interfaz.ListaGramatica
 import Interfaz.VentanaDescripcion
+import Interfaz.GramaticaLibre
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"../assets/frame0")
 afd_registrados=[]
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-class ListaGramatica(tk.Toplevel):
+class ListaGramatica(tk.Tk):
     def __init__(self):
         super().__init__()
         self.resizable(False, False)
@@ -34,6 +35,7 @@ class ListaGramatica(tk.Toplevel):
 
         def abrir_menu_principal():
             self.destroy()
+            Interfaz.GramaticaLibre.GramaticaLibre()
         self.listbox = Listbox(
             self,
             bd=0,

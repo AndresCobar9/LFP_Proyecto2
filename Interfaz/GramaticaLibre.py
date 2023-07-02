@@ -11,29 +11,29 @@ import Interfaz.MenuPrincipal
 from PIL import Image
 import Interfaz.ListaGramaticaArbol
 import Clases.GramaticaLDC
+import Interfaz.MenuPrincipal
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"../assets/frame0")
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-class GramaticaLibre(tk.Toplevel):
+class GramaticaLibre(tk.Tk):
     def __init__(self):
         super().__init__()
-       
         screen_width = self.winfo_screenwidth()
         screen_height = self.winfo_screenheight()
         x = (screen_width/2) - (1115/2)
         y = (screen_height/2) - (600/2)
         self.geometry("%dx%d+%d+%d" % (1115, 600, x, y))
-
+        self.title("Gramatica Libre de Contexto")
         self.geometry("1115x600")
         self.configure(bg="#FFFFFF")
         def on_enter(event):
             event.widget.config(bg="#288AC0", fg="white")
 
         def cargarArchivo():
-            self.destroy()
+            
             archivo = filedialog.askopenfilename(filetypes=[("Text files","*.txt")])
             if archivo:
                 cargar_archivo(archivo)
@@ -42,7 +42,10 @@ class GramaticaLibre(tk.Toplevel):
             event.widget.config(bg="#2CCCEF", fg="black")
 
         def abrir_menu_principal():
+            Interfaz.MenuPrincipal.MenuPrincipal()
             self.destroy()
+        
+       
 
         button_1 = Button(
             self,
@@ -67,7 +70,7 @@ class GramaticaLibre(tk.Toplevel):
             relief="flat",
             text="Informacion General",
             font=("Helveltica", 16),
-            command= lambda: Interfaz.ListaGramatica.ListaGramatica()
+            command= lambda: (Interfaz.ListaGramatica.ListaGramatica(), self.destroy())
         )
         button_2.place(
             x=0.0,
@@ -105,7 +108,8 @@ class GramaticaLibre(tk.Toplevel):
             relief="flat",
             font=("Helveltica", 16),
             text="Arbol de Derivacion",
-            command= lambda: Interfaz.ListaGramaticaArbol.ListaGramaticaArbol()
+            command= lambda: (Interfaz.ListaGramaticaArbol.ListaGramaticaArbol(), self.destroy())
+            
 
         )
         button_5.place(

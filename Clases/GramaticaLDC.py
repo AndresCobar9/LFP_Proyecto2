@@ -20,8 +20,6 @@ class Grammar:
         return '\n'.join(self.productions)    
     
 def get_all():
-    for grammar in all_grammars:
-        print(grammar)
-        print()
+
     return all_grammars
 

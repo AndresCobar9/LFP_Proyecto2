@@ -5,13 +5,14 @@ from tkinter import messagebox
 import Interfaz.MenuPrincipal
 from PIL import Image
 import Clases.AutomataPila
+import Interfaz.ModuloAP
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"../assets/frame0")
 afn_registrados=[]
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-class ValidarCadena(tk.Toplevel):
+class MenuCadenas(tk.Tk):
     def __init__(self):
         super().__init__()
         self.resizable(False, False)
@@ -20,10 +21,8 @@ class ValidarCadena(tk.Toplevel):
         x = (screen_width/2) - (1115/2)
         y = (screen_height/2) - (600/2)
         self.geometry("%dx%d+%d+%d" % (1115, 600, x, y))
-        self.overrideredirect(True)  # Turns off title bar and geometry
-        self.wm_attributes("-topmost", 1)  # Forces tkinter window to be on top of all other windows
-
-        self.geometry("1115x600")
+        self.title("Validar Cadena")
+        self.geometry("1115x600")   
         self.configure(bg="#FFFFFF")
         def on_enter(event):
             event.widget.config(bg="#288AC0", fg="white")
@@ -32,7 +31,9 @@ class ValidarCadena(tk.Toplevel):
             event.widget.config(bg="#2CCCEF", fg="black")
 
         def abrir_menu_principal():
+            Interfaz.ModuloAP.ModuloAP()
             self.destroy()
+
         self.listbox = Listbox(
             self,
             bd=0,
@@ -53,6 +54,7 @@ class ValidarCadena(tk.Toplevel):
         self.scrollbar.place(x=1030.0, y=100.0, width=17.0, height=450)
         self.listbox.config(yscrollcommand=self.scrollbar.set)
         cargarAFN(self)
+        
 
         entry_1 = Entry(
             self,
@@ -62,13 +64,13 @@ class ValidarCadena(tk.Toplevel):
             highlightthickness=0,
             bd=0,
             justify="center",
-            example="Ingrese la cadena a validar"
+            
+            
         )
         entry_1.place(
-            x=0.0,
-            y=240.0,
+            x=660.0, y=34.0,
             width=327.0,
-            height=120.0
+            height=30.0
         )
 
 
@@ -80,7 +82,7 @@ class ValidarCadena(tk.Toplevel):
             relief="flat",
             font=("Helvetica", 16),
             text="Validar Cadena",
-            command=lambda: RutaValidacion,
+            command=lambda: ComprobarCadena(self, getEntry()),
         )
         button_1.bind("<Enter>", on_enter)
         button_1.bind("<Leave>", on_leave)
@@ -97,8 +99,8 @@ class ValidarCadena(tk.Toplevel):
             borderwidth=0,
             highlightthickness=0,
             relief="flat",
-            text="Ruta",
-            command= lambda: ComprobarCadena(self, getEntry()),
+            text="Ruta de Validacion",
+            command= lambda: RutaValidacion(self, getEntry()),
             font=("Helveltica", 16),
         )
         button_2.place(
@@ -110,8 +112,43 @@ class ValidarCadena(tk.Toplevel):
         button_2.bind("<Enter>", on_enter)
         button_2.bind("<Leave>", on_leave)
 
+        button_4 = Button(
+            self,
+            bg="#2CCCEF",
+            borderwidth=0,
+            highlightthickness=0,
+            relief="flat",
+            text="Recorrido Paso a Paso",
+            command= lambda: PasoPaso(self, getEntry()),
+            font=("Helveltica", 16),
+        )
+        button_4.place(
+            x=0.0,
+            y=240.0,
+            width=327.0,
+            height=120.0
+        )
+        button_4.bind("<Enter>", on_enter)
+        button_4.bind("<Leave>", on_leave)
         
-        
+        button_5 = Button(
+            self,
+            bg="#2CCCEF",
+            borderwidth=0,
+            highlightthickness=0,
+            relief="flat",
+            text="Una Pasada",
+            command= lambda: UnaPasada(self, getEntry()),
+            font=("Helveltica", 16),
+        )
+        button_5.place(
+            x=0.0,
+            y=360.0,
+            width=327.0,
+            height=120.0
+        )
+        button_5.bind("<Enter>", on_enter)
+        button_5.bind("<Leave>", on_leave)
             
         button_3 = Button(
             self,
@@ -135,34 +172,47 @@ class ValidarCadena(tk.Toplevel):
 
         label1 = Label(
         self,
-        text="AFN Registrados",
-        font=("Happy Monkey", 28),
+        text="Ruta a evaluar:",
+        font=("Happy Monkey", 20),
         bg="#FFFFFF",
         )
-        label1.place(x=580.0, y=30.0, anchor="nw")
+        label1.place(x=410.0, y=30.0, anchor="nw")
 
        
 def cargarAFN(self):
-    afn_registrados = Clases.AFN.listaAFN()
-    for afn in afn_registrados:
-        self.listbox.insert(END, afn.nombre + " - Estados: " + str(afn.estados))
-
+    AP = Clases.AutomataPila.listaAutomataPila()
+    print(AP)
+    for Gramatica in AP:
+        self.listbox.insert(END, "Nombre: "+  Gramatica.nombre + " - Alfabeto: " + str(Gramatica.alfabeto) + " - Restados: " + str(Gramatica.estados))
+        
 
 
 def ComprobarCadena(self, cadena):
     selected_index = self.listbox.curselection()
     afn_registrados = Clases.AutomataPila.listaAutomataPila()              
-    print("----------" +cadena + " " + str(selected_index))  
+     
     if selected_index:
         afn = afn_registrados[selected_index[0]]
         resultados = Clases.AutomataPila.comprobar_cadena_ap(afn, cadena)
-        messagebox.showinfo("Resultados", "Resultado:" + resultados)
+        messagebox.showinfo("Resultados", resultados)
 
 def RutaValidacion(self, cadena):
     selected_index = self.listbox.curselection()
     ap_registrados = Clases.AutomataPila.listaAutomataPila()              
-    print("----------" +cadena + " " + str(selected_index))  
     if selected_index:
         ap = ap_registrados[selected_index[0]]
-        resultados = Clases.AutomataPila.comprobar_cadena_ap(ap, cadena)
-        messagebox.showinfo("Resultados", "Resultado:" + resultados)
+        resultados = Clases.AutomataPila.comprobar_cadena_ap_ruta(ap, cadena)
+        
+def PasoPaso(self,cadena):
+    selected_index = self.listbox.curselection()
+    ap_registrados = Clases.AutomataPila.listaAutomataPila()              
+    if selected_index:
+        ap = ap_registrados[selected_index[0]]
+        resultados = Clases.AutomataPila.comprobar_cadena_ap_Paso(ap, cadena)
+
+def UnaPasada(self,cadena):
+    selected_index = self.listbox.curselection()
+    ap_registrados = Clases.AutomataPila.listaAutomataPila()              
+    if selected_index:
+        ap = ap_registrados[selected_index[0]]
+        resultados = Clases.AutomataPila.SoloPaso(ap, cadena)

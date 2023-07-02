@@ -1,8 +1,9 @@
 import random
 from tkinter import messagebox
-
+import Interfaz.VentanaRuta
+import Interfaz.VentanaPasada
 ap_registrados = []
-
+import Clases.RecorridoPasoaPaso
 class AutomataPila:
     def __init__(self, nombre, alfabeto, SimboloPila, estados, estado_inicial, estados_aceptacion, transiciones):
         self.nombre = nombre
@@ -19,6 +20,7 @@ class AutomataPila:
             origen, entrada, sacarPila, destino, entraPila = transicion.split(',')
             
             self.transiciones.setdefault(origen, {})[entrada] = destino
+
 
 
     def __str__(self):
@@ -68,7 +70,7 @@ def verificar_estado_inicial(estado_inicial, estados):
         return True
 
 
-def estados_aceptacion(estados_aceptacion, estados):
+def Estados_aceptacion(estados_aceptacion, estados):
     for estado in estados_aceptacion:
         if estado not in estados:
             messagebox.showerror(title="Error", message="Los estados de aceptación no están en la lista de estados")
@@ -111,10 +113,11 @@ def listaAutomataPila():
 
 
 def comprobar_cadena_ap(ap, cadena):
-
+    cadena = "$"+cadena+"$"
     estado_actual = ap.estado_inicial
     
     for caracter in cadena:
+        
         if caracter not in ap.alfabeto:
             messagebox.showerror(title="Error", message=f"El caracter '{caracter}' no está en el alfabeto del AutomataPila '{ap.nombre}'")
             return False
@@ -124,26 +127,172 @@ def comprobar_cadena_ap(ap, cadena):
             return False
         
         estado_actual = ap.transiciones[estado_actual][caracter]
-        print(estado_actual)
+
+        
     
     if estado_actual in ap.estados_aceptacion:
        
-        return f"La cadena '{cadena}' es válida en el AutomataPila '{ap.nombre}'"
+        return f"La cadena: | {cadena.replace('$','')}  | es válida en el AutomataPila '{ap.nombre}'"
     else:
-        return f"La cadena '{cadena}' no es válida en el AutomataPila '{ap.nombre}'"
+        return f"La cadena: | {cadena.replace('$','')}  | no es válida en el AutomataPila '{ap.nombre}'"
+    
+
+def comprobarCadenaRapido(ap, cadena):
+    cadena = "$"+cadena+"$"
+    estado_actual = ap.estado_inicial
+    
+    for caracter in cadena:
+        
+        if caracter not in ap.alfabeto:
+            messagebox.showerror(title="Error", message=f"El caracter '{caracter}' no está en el alfabeto del AutomataPila '{ap.nombre}'")
+            return False
+        
+        if estado_actual not in ap.transiciones or caracter not in ap.transiciones[estado_actual]:
+            messagebox.showerror(title="Error", message=f"No hay una transición definida para el estado '{estado_actual}' y el caracter '{caracter}' en el AutomataPila '{ap.nombre}'")
+            return False
+        
+        estado_actual = ap.transiciones[estado_actual][caracter]
+
+        
+    
+    if estado_actual in ap.estados_aceptacion:
+       
+        return True
+    else:
+        return False
+    
+def comprobar_cadena_ap_ruta(ap, cadena):
+    cadena = "$"+cadena+"$"
+    estado_actual = ap.estado_inicial
+    transicion = []
+    for caracter in cadena:
+        
+        if caracter not in ap.alfabeto:
+            messagebox.showerror(title="Error", message=f"El caracter '{caracter}' no está en el alfabeto del AutomataPila '{ap.nombre}'")
+            return False
+        
+        if estado_actual not in ap.transiciones or caracter not in ap.transiciones[estado_actual]:
+            messagebox.showerror(title="Error", message=f"No hay una transición definida para el estado '{estado_actual}' y el caracter '{caracter}' en el AutomataPila '{ap.nombre}'")
+            return False
+        
+        estado_anterior = estado_actual
+        estado_actual = ap.transiciones[estado_actual][caracter]
+        for Transicion in ap.transicionesN:
+            Origen, Entrada, sacarPila, Destino, EntraPila = Transicion.split(',')
+            
+            if Origen == estado_anterior and caracter == Entrada and estado_actual == Destino:
+                ruta = f"{Origen},{Entrada},{sacarPila},{Destino},{EntraPila}"
+                ruta = ruta.replace("$", "λ")
+                transicion.append(ruta)
+        
+    
+    if estado_actual in ap.estados_aceptacion:
+       
+        Interfaz.VentanaRuta.VistaRuta(cadena.replace('$',''),transicion,ap.nombre)
+    else:
+        return f"La cadena '{cadena.replace('$','')}' no es válida en el AutomataPila '{ap.nombre}'"    
+    
+
+def comprobar_cadena_ap_Paso(ap, cadena):
+    if comprobarCadenaRapido(ap,cadena):
+        cadena = "$"+cadena+"$"
+        estado_actual = ap.estado_inicial
+        transicion = []
+
+        caracteres=""
+        for caracter in cadena:
+            caracteres = caracteres + caracter
+            if caracter not in ap.alfabeto:
+                messagebox.showerror(title="Error", message=f"El caracter '{caracter}' no está en el alfabeto del AutomataPila '{ap.nombre}'")
+                return False
+            
+            if estado_actual not in ap.transiciones or caracter not in ap.transiciones[estado_actual]:
+                messagebox.showerror(title="Error", message=f"No hay una transición definida para el estado '{estado_actual}' y el caracter '{caracter}' en el AutomataPila '{ap.nombre}'")
+                return False
+            
+            estado_anterior = estado_actual
+            estado_actual = ap.transiciones[estado_actual][caracter]
+            for Transicion in ap.transicionesN:
+                Origen, Entrada, sacarPila, Destino, EntraPila = Transicion.split(',')
+                
+                if Origen == estado_anterior and caracter == Entrada and estado_actual == Destino:
+                    ruta = f"{Entrada},{sacarPila},{EntraPila}"
+                    ruta = ruta.replace("$", "λ")
+                    
+                    Clases.RecorridoPasoaPaso.GenerarDOT(ap, caracteres, estado_actual, ruta, Transicion,False)
+                    
+    else:
+        messagebox.showerror(title="Error", message=f"La cadena '{cadena}' no es válida en el AutomataPila '{ap.nombre}'")
+        
+    
+    if estado_actual in ap.estados_aceptacion:
+       
+        Clases.RecorridoPasoaPaso.GenerarDOT(ap, cadena, estado_actual, ruta, Transicion,True)
+    else:
+        return f"La cadena '{cadena.replace('$','')}' no es válida en el AutomataPila '{ap.nombre}'"        
+    
+
+
+
+def SoloPaso(ap, cadena):
+    if comprobarCadenaRapido(ap,cadena):
+        cadena = "$"+cadena+"$"
+        estado_actual = ap.estado_inicial
+        info = []
+        pila = []
+        caracteres=""
+        for caracter in cadena:
+            caracteres = caracteres + caracter
+            if caracter not in ap.alfabeto:
+                messagebox.showerror(title="Error", message=f"El caracter '{caracter}' no está en el alfabeto del AutomataPila '{ap.nombre}'")
+                return False
+            
+            if estado_actual not in ap.transiciones or caracter not in ap.transiciones[estado_actual]:
+                messagebox.showerror(title="Error", message=f"No hay una transición definida para el estado '{estado_actual}' y el caracter '{caracter}' en el AutomataPila '{ap.nombre}'")
+                return False
+            
+            estado_anterior = estado_actual
+            estado_actual = ap.transiciones[estado_actual][caracter]
+            for Transicion in ap.transicionesN:
+                Origen, Entrada, sacarPila, Destino, EntraPila = Transicion.split(',')
+                
+                if Origen == estado_anterior and caracter == Entrada and estado_actual == Destino:
+                    ruta = f"{Origen},{Entrada},{sacarPila},{Destino},{EntraPila}"
+                    try:    
+                        if EntraPila != '$':
+                                pila.append(EntraPila)
+                        if sacarPila != '$':
+                                if len(pila) > 0:
+                                    pila.remove(sacarPila)
+                    except:
+                        pass
+                    ruta = ruta.replace("$", "λ")
+                    info.append([ruta , Transicion, str(pila), caracteres])
+        Interfaz.VentanaPasada.VistaRuta(info)
+                    
+                    
+                    
+    else:
+        messagebox.showerror(title="Error", message=f"La cadena '{cadena}' no es válida en el AutomataPila '{ap.nombre}'")
+        
+    
+
+
 
 def addPila(nombre, alfabeto, SimboloPila, estados, estado_inicial, estados_aceptacion, transiciones):
     del transiciones[-1]
     if nombre == "" or estados == "" or alfabeto == "" or estado_inicial == "" or estados_aceptacion == "" or SimboloPila == "" or transiciones == "": 
         messagebox.showerror(title="Error", message="Alguno de los campos esta Vacio")
         return
+    
     else:
         if verificar_estado_inicial(estado_inicial, estados) == True:
-            if estados_aceptacion(estados_aceptacion, estados) == True:
+            if Estados_aceptacion(estados_aceptacion, estados) == True:
                 if verificar_transiciones(transiciones, estados, alfabeto, SimboloPila)== True:
                     if verificar_alfabeto(alfabeto)== True:
-                        Crear_AutomataPila(nombre, alfabeto, estados, estado_inicial, estados_aceptacion, transiciones)
-                        messagebox.showinfo(title="Exito", message="AFD creado con exito")
+                        Crear_AutomataPila(nombre, alfabeto, SimboloPila, estados, estado_inicial, estados_aceptacion, transiciones)
+                        
+                        
                         
                         return True
     

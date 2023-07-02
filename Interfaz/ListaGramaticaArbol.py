@@ -8,13 +8,14 @@ import Clases.GramaticaLDC
 import Interfaz.ListaGramatica
 import Interfaz.VentanaDescripcion
 import Clases.CrearArbol
+import Interfaz.GramaticaLibre
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"../assets/frame0")
 afd_registrados=[]
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-class ListaGramaticaArbol(tk.Toplevel):
+class ListaGramaticaArbol(tk.Tk):
     def __init__(self):
         super().__init__()
         self.resizable(False, False)
@@ -23,7 +24,7 @@ class ListaGramaticaArbol(tk.Toplevel):
         x = (screen_width/2) - (1115/2)
         y = (screen_height/2) - (600/2)
         self.geometry("%dx%d+%d+%d" % (1115, 600, x, y))
- 
+        self.title("Lista de Gramaticas")
 
         self.geometry("1115x600")
         self.configure(bg="#FFFFFF")
@@ -35,6 +36,8 @@ class ListaGramaticaArbol(tk.Toplevel):
 
         def abrir_menu_principal():
             self.destroy()
+            Interfaz.GramaticaLibre.GramaticaLibre()
+
         self.listbox = Listbox(
             self,
             bd=0,

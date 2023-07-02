@@ -13,13 +13,14 @@ import Interfaz.ListaGramaticaArbol
 import Interfaz.InformacionAutomata
 import Clases.GramaticaLDC
 import Clases.AutomataPila
+import Interfaz.MenuCadenas
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"../assets/frame0")
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-class ModuloAP(tk.Toplevel):
+class ModuloAP(tk.Tk):
     def __init__(self):
         super().__init__()
        
@@ -35,15 +36,16 @@ class ModuloAP(tk.Toplevel):
             event.widget.config(bg="#288AC0", fg="white")
 
         def cargarArchivo():
-            self.destroy()
             archivo = filedialog.askopenfilename(filetypes=[("Text files","*.txt")])
             if archivo:
                 cargar_archivo(archivo)
+
 
         def on_leave(event):
             event.widget.config(bg="#2CCCEF", fg="black")
 
         def abrir_menu_principal():
+            Interfaz.MenuPrincipal.MenuPrincipal()
             self.destroy()
 
         button_1 = Button(
@@ -69,7 +71,7 @@ class ModuloAP(tk.Toplevel):
             relief="flat",
             text="Informacion del Automata de Pila",
             font=("Helveltica", 16),
-            command= lambda: Interfaz.InformacionAutomata.InformacionAutomata()
+            command= lambda: (Interfaz.InformacionAutomata.InformacionAutomata(), self.destroy())
         )
         button_2.place(
             x=0.0,
@@ -107,7 +109,7 @@ class ModuloAP(tk.Toplevel):
             relief="flat",
             font=("Helveltica", 16),
             text="Cadenas",
-            command= lambda: Interfaz.ListaGramaticaArbol.ListaGramaticaArbol()
+            command= lambda: (Interfaz.MenuCadenas.MenuCadenas(), self.destroy())
 
         )
         button_5.place(
@@ -147,7 +149,7 @@ class ModuloAP(tk.Toplevel):
 
         label4 = Label(
             self,
-            text="GRAMATICA LIBRE",
+            text="Automata de Pila",
             font=("Happy Monkey", 48),
             fg="#000000",
             bg="#FFFFFF"
@@ -189,9 +191,35 @@ def cargar_archivo(archivo):
                     i += 1
                 
             i += 6
-            print(nombre, estados, alfabeto, estado_inicial, estados_aceptacion, transiciones)
+            
             transiciones.append('')
-            Clases.AutomataPila.AddPila(nombre, alfabeto, SimbolodePila, estados, estado_inicial, estados_aceptacion, transiciones)
+            contador=0
+            for Alfabeto in alfabeto:
+
+                if Alfabeto == "$":
+                    break
+                elif Alfabeto != "$":
+                    contador+=1
+                    if contador == len(Alfabeto):
+                        alfabeto.append("$")
+                        contador=0
+                        break
+
+            for SimboloPila in SimbolodePila:
+
+                if SimboloPila == "$":
+                    break
+                elif SimboloPila != "$":
+                    contador+=1
+                    if contador == len(alfabeto):
+                        SimbolodePila.append("$")
+                        contador=0
+                        break
+
+            Clases.AutomataPila.addPila(nombre, alfabeto, SimbolodePila, estados, estado_inicial, estados_aceptacion, transiciones)
+
+
+        messagebox.showinfo(title="Exito", message="Archivo Cargado con exito")
 
 
 

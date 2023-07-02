@@ -8,13 +8,16 @@ import Clases.GramaticaLDC
 import Interfaz.ListaGramatica
 import Interfaz.VentanaDescripcion
 import Clases.CrearArbol
+import Clases.GrafoAP
+import Interfaz.ModuloAP
+import Clases.AutomataPila
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"../assets/frame0")
 afd_registrados=[]
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-class InformacionAutomata(tk.Toplevel):
+class InformacionAutomata(tk.Tk):
     def __init__(self):
         super().__init__()
         self.resizable(False, False)
@@ -24,7 +27,7 @@ class InformacionAutomata(tk.Toplevel):
         y = (screen_height/2) - (600/2)
         self.geometry("%dx%d+%d+%d" % (1115, 600, x, y))
  
-
+        self.title("Informacion Automata")
         self.geometry("1115x600")
         self.configure(bg="#FFFFFF")
         def on_enter(event):
@@ -34,7 +37,9 @@ class InformacionAutomata(tk.Toplevel):
             event.widget.config(bg="#2CCCEF", fg="black")
 
         def abrir_menu_principal():
+            Interfaz.ModuloAP.ModuloAP()
             self.destroy()
+
         self.listbox = Listbox(
             self,
             bd=0,
@@ -108,18 +113,21 @@ class InformacionAutomata(tk.Toplevel):
 
        
 def cargarAFD(self):
-    Gramaticas = Clases.GramaticaLDC.get_all()
-    for Gramatica in Gramaticas:
-        self.listbox.insert(END, "Nombre: "+  Gramatica.name + " - Terminales: " + str(Gramatica.terminals) + " - No Terminales: " + str(Gramatica.non_terminals))
-        print(Gramatica.name + " - Terminales: " + str(Gramatica.terminals) + " - No Terminales: " + str(Gramatica.non_terminals))
+    AP = Clases.AutomataPila.listaAutomataPila()
+    print(AP)
+    for Gramatica in AP:
+        self.listbox.insert(END, "Nombre: "+  Gramatica.nombre + " - Alfabeto: " + str(Gramatica.alfabeto) + " - Restados: " + str(Gramatica.estados))
+        
 
 def CargarInformacion(self):
     selected_index = self.listbox.curselection()
-    Gramaticas_registradas = Clases.GramaticaLDC.get_all()           
+    AP = Clases.AutomataPila.listaAutomataPila()         
      
     if selected_index:
         # Obtener el AFD correspondiente al índice seleccionado
-        Grm = Gramaticas_registradas[selected_index[0]]   
-        derivation_tree_graph = Clases.CrearArbol.create_derivation_tree_graph(Grm)
-        derivation_tree_graph.render('derivation_tree_graph', format='png')
-
+        Grm = AP[selected_index[0]]   
+        print(Grm.estados, Grm.estados_aceptacion, Grm.transiciones, Grm.transicionesN,Grm.estado_inicial, Grm.nombre,Grm.alfabeto)
+        Clases.GrafoAP.generarReporteAutomataPila( Grm.estados, Grm.estados_aceptacion, Grm.transiciones, Grm.transicionesN,Grm.estado_inicial, Grm.nombre,Grm.alfabeto,Grm.alfabeto,Grm.SimboloPila)
+    
+                                                                                
+        

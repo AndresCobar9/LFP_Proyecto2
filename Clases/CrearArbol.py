@@ -2,15 +2,14 @@
 import graphviz
 
 
+
 def create_derivation_tree_graph(Grammar):
     graph = graphviz.Digraph(comment='Derivation Tree')
     i = 0
     real_left = ""
     for production in Grammar.productions:
         left, right = production.split('::=')
-        print(left, right)
         right_symbols = right.split()
-        print(right_symbols)
         if i == 0:
             left = left + str(i)
             graph.node(left, left)

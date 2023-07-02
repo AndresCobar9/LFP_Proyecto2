@@ -1,0 +1,16 @@
+digraph AP1 {
+	rankdir=LR size="8,5"
+	"Cadena: aabb" [shape=rectangle]
+	"Cadena: []" [shape=rectangle]
+	I [color=red shape=circle]
+	C [shape=circle]
+	A [shape=circle]
+	B [shape=circle]
+	F [color=green shape=doublecircle]
+	I -> A [label="λ,λ,#"]
+	A -> B [label="a,λ,a"]
+	B -> B [label="a,λ,a"]
+	B -> C [label="b,a,λ"]
+	C -> C [label="b,a,λ"]
+	C -> F [label="λ,#,λ"]
+}
