@@ -101,7 +101,7 @@ class ListaGramatica(tk.Tk):
 
         label1 = Label(
         self,
-        text="AFD Registrados",
+        text="AP Registrados",
         font=("Happy Monkey", 28),
         bg="#FFFFFF",
         )

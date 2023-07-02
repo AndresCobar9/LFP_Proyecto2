@@ -52,7 +52,7 @@ class MenuEmergente(tk.Tk):
             fg="#000000",
             bg="#FFFFFF"
         )
-        label2.place(x=110.0, y=220.0, anchor="nw")
+        label2.place(x=110.0, y=200.0, anchor="nw")
 
         label3 = Label(
             self,

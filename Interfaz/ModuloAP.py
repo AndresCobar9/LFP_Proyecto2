@@ -33,7 +33,7 @@ class ModuloAP(tk.Tk):
         self.geometry("1115x600")
         self.configure(bg="#FFFFFF")
         def on_enter(event):
-            event.widget.config(bg="#288AC0", fg="white")
+            event.widget.config(bg="#a63232", fg="white")
 
         def cargarArchivo():
             archivo = filedialog.askopenfilename(filetypes=[("Text files","*.txt")])
@@ -42,7 +42,7 @@ class ModuloAP(tk.Tk):
 
 
         def on_leave(event):
-            event.widget.config(bg="#2CCCEF", fg="black")
+            event.widget.config(bg="#e15a5a", fg="black")
 
         def abrir_menu_principal():
             Interfaz.MenuPrincipal.MenuPrincipal()
@@ -50,7 +50,7 @@ class ModuloAP(tk.Tk):
 
         button_1 = Button(
             self,
-            bg="#2CCCEF",
+            bg="#e15a5a",
             borderwidth=0,
             highlightthickness=0,
             relief="flat",
@@ -65,7 +65,7 @@ class ModuloAP(tk.Tk):
 
         button_2 = Button(
             self,
-            bg="#2CCCEF",
+            bg="#e15a5a",
             borderwidth=0,
             highlightthickness=0,
             relief="flat",
@@ -85,7 +85,7 @@ class ModuloAP(tk.Tk):
        
         button_4 = Button(
             self,
-            bg="#2CCCEF",
+            bg="#e15a5a",
             borderwidth=0,
             highlightthickness=0,
             relief="flat",
@@ -103,7 +103,7 @@ class ModuloAP(tk.Tk):
         button_4.bind("<Leave>", on_leave)
         button_5 = Button(
             self,
-            bg="#2CCCEF",
+            bg="#e15a5a",
             borderwidth=0,
             highlightthickness=0,
             relief="flat",
