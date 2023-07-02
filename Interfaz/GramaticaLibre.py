@@ -34,7 +34,7 @@ class GramaticaLibre(tk.Tk):
 
         def cargarArchivo():
             
-            archivo = filedialog.askopenfilename(filetypes=[("Text files","*.txt")])
+            archivo = filedialog.askopenfilename(filetypes=[("Text files","*.glc")])
             if archivo:
                 cargar_archivo(archivo)
 

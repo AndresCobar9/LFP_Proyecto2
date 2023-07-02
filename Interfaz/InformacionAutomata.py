@@ -31,10 +31,10 @@ class InformacionAutomata(tk.Tk):
         self.geometry("1115x600")
         self.configure(bg="#FFFFFF")
         def on_enter(event):
-            event.widget.config(bg="#288AC0", fg="white")
+            event.widget.config(bg="#a63232", fg="white")
 
         def on_leave(event):
-            event.widget.config(bg="#2CCCEF", fg="black")
+            event.widget.config(bg="#e15a5a", fg="black")
 
         def abrir_menu_principal():
             Interfaz.ModuloAP.ModuloAP()
@@ -65,7 +65,7 @@ class InformacionAutomata(tk.Tk):
 
         button_1 = Button(
             self,
-            bg="#2CCCEF",
+            bg="#e15a5a",
             borderwidth=0,
             highlightthickness=0,
             relief="flat",
@@ -85,7 +85,7 @@ class InformacionAutomata(tk.Tk):
             
         button_3 = Button(
             self,
-            bg="#2CCCEF",
+            bg="#e15a5a",
             borderwidth=0,
             highlightthickness=0,
             relief="flat",
@@ -105,7 +105,7 @@ class InformacionAutomata(tk.Tk):
 
         label1 = Label(
         self,
-        text="AFD Registrados",
+        text="Automatas Cargados",
         font=("Happy Monkey", 28),
         bg="#FFFFFF",
         )

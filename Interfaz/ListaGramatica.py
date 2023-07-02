@@ -66,7 +66,7 @@ class ListaGramatica(tk.Tk):
             highlightthickness=0,
             relief="flat",
             font=("Helvetica", 16),
-            text="Cargar Informacion",
+            text="Mostrar Informacion",
             command=lambda: CargarInformacion(self)
             
         )

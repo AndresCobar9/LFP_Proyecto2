@@ -36,7 +36,7 @@ class ModuloAP(tk.Tk):
             event.widget.config(bg="#a63232", fg="white")
 
         def cargarArchivo():
-            archivo = filedialog.askopenfilename(filetypes=[("Text files","*.txt")])
+            archivo = filedialog.askopenfilename(filetypes=[("Text files","*.ap")])
             if archivo:
                 cargar_archivo(archivo)
 

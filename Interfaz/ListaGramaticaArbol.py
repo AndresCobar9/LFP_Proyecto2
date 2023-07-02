@@ -68,7 +68,7 @@ class ListaGramaticaArbol(tk.Tk):
             highlightthickness=0,
             relief="flat",
             font=("Helvetica", 16),
-            text="Cargar Informacion",
+            text="Cargar Arbol",
             command=lambda: CargarInformacion(self)
             
         )
